@@ -14,12 +14,15 @@
  only really need to create a queue and use the offset logic to work out depth.*/
 
 class Node {
-  constructor([x, y], parent = null) {
+  constructor([x, y], moves, route) {
     this.location = [x, y];
-    this.parent = parent;
+    this.moves = moves;
+    this.route = route;
   }
 }
-/* create a board with cells containing a [false] value */
+/* create a board with cells containing a [false] value. This will be used
+to make sure the BFS loop doesn't keep trying to select nodes that have already been
+passed. */
 const createGameBoard = () => {
   const gameBoard = [];
   for (let i = 0; i <= 7; i++) {
@@ -47,11 +50,68 @@ const isWithinBounds = (loc) => {
   }
 };
 
-const availableMoves = (loc) => {};
+/* uses the above 2 functions to return the only available moves based on the 
+submitted co-ordinates */
+const availableMoves = (board, loc) => {
+  let moves = [
+    [loc[0] + 2, loc[1] + 1],
+    [loc[0] + 2, loc[1] - 1],
+    [loc[0] + 1, loc[1] + 2],
+    [loc[0] + 1, loc[1] - 2],
+    [loc[0] - 1, loc[1] + 2],
+    [loc[0] - 1, loc[1] - 2],
+    [loc[0] - 2, loc[1] + 1],
+    [loc[0] - 2, loc[1] - 1],
+  ];
+  let available = moves.filter((move) => {
+    if (isWithinBounds(move) && checkTileOpen(board, move)) {
+      return move;
+    }
+  });
+  return available;
+};
 
-const board = createGameBoard();
+const knightTravails = (start, end) => {
+  let currentBoard = createGameBoard();
+  let queue = [new Node([start[0], start[1]], 0, [start[0], start[1]])];
+  /* The BFS part */
+  while (queue.length > 0) {
+    let currentMove = queue.shift();
+    let x = currentMove.location[0];
+    let y = currentMove.location[1];
+    /* This is here to check off every node on the current board to stop
+    it being accessed more than once */
+    currentBoard[x][y] = true;
+    /* If we've found our end value we return it */
+    if (
+      currentMove.location[0] === end[0] &&
+      currentMove.location[1] === end[1]
+    ) {
+      return currentMove;
+    } else {
+      /* If not we keep adding nodes to the queue using the available move checker
+      setup earlier. We make sure each child node has it's parent nodes 'route' and
+      'depth' incremented so that we can use these in the result */
+      let available = availableMoves(currentBoard, currentMove.location);
+      available.forEach((move) => {
+        let node = new Node(
+          [move[0], move[1]],
+          currentMove.moves + 1,
+          currentMove.route.concat([move])
+        );
+        queue.push(node);
+      });
+    }
+  }
+};
+
+/* const board = createGameBoard();
 console.log(board);
-const tile = new Node([7, 3]);
+const tile = new Node([5, 5]);
 console.log(tile.location[0]);
 console.log(isWithinBounds(tile.location));
 console.log(checkTileOpen(board, tile.location));
+console.log(availableMoves(board, tile.location)); */
+console.log(knightTravails([1, 1], [7, 7]));
+console.log(knightTravails([7, 7], [0, 3]));
+console.log(knightTravails([1, 6], [7, 2]));
