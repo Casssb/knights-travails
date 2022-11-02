@@ -6,7 +6,7 @@ A knight in chess can move to any square on the standard 8x8 chess board from an
 
 All the possible places you can end up after one move look like this:
 
-![Image of knight moves](board.PNG)
+![Image of knight moves](./board.png)
 
 My solution to this puzzle uses the following functions:
 
