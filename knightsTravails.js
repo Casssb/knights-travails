@@ -71,7 +71,7 @@ const availableMoves = (board, loc) => {
   return available;
 };
 
-const knightTravails = (start, end) => {
+const knightMoves = (start, end) => {
   let currentBoard = createGameBoard();
   let queue = [new Node([start[0], start[1]], 0, [start[0], start[1]])];
   /* The BFS part */
@@ -105,6 +105,12 @@ const knightTravails = (start, end) => {
   }
 };
 
+const printKnightMoves = (start, end) => {
+  const result = knightMoves(start, end);
+  console.log(result.route)
+  return `You made it in ${result.moves} moves! Here's your path: ${result.route}`;
+};
+
 /* const board = createGameBoard();
 console.log(board);
 const tile = new Node([5, 5]);
@@ -112,6 +118,8 @@ console.log(tile.location[0]);
 console.log(isWithinBounds(tile.location));
 console.log(checkTileOpen(board, tile.location));
 console.log(availableMoves(board, tile.location)); */
-console.log(knightTravails([1, 1], [7, 7]));
-console.log(knightTravails([7, 7], [0, 3]));
-console.log(knightTravails([1, 6], [7, 2]));
+console.log(printKnightMoves([1, 1], [7, 7]));
+console.log(printKnightMoves([7, 7], [0, 3]));
+console.log(printKnightMoves([1, 6], [7, 2]));
+/* You made it in 4 moves! Here's your path:
+ [1,6],[3,7],[5,6],[6,4],[7,2]*/
