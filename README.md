@@ -21,5 +21,7 @@ My solution to this puzzle uses the following functions:
 `availableMoves` uses the above 3 functions to return `Node` objects which are the potential moves used to create the graph structure. This is the key to the search method below
 
 `knightMoves` takes in the start/end coordinates and forms a breadth first search. The first `Node` is added to a queue after being passed the initial coordinates. It is also passed the starting depth (0) and step 1 of the potential route (initial coordinates).
+
 The `availableMoves` function is then used to enqueue all the potential 'second' move `Node`'s (dequeuing the first move `Node`) and so-on. Every time a 'layer' of moves is added to the queue the dequeued `Node` has it's `moves` incremented and another set of coordinates concatenated onto it's `route`.
+
 This logic will continue until one of the `Node` object's `location` is equal to the end coordinates submitted to the `knightMoves` function (or until there are no more `Node`'s in the queue- meaning the entire matrix has been searched)
